@@ -12,6 +12,9 @@ URL:        https://github.com/sass/sassc
 Source0:    https://github.com/sass/%{pkg_name}/archive/%{version}.tar.gz
 
 BuildRequires:  %{?scl_prefix}libsass-devel
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
 Requires:       %{?scl_prefix}libsass
 
 %description
@@ -19,10 +22,12 @@ CLI wrapper around libsass
 
 %prep
 %setup -q -n %{pkg_name}-%{version}
+autoreconf --force --install
 
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
+export SASSC_VERSION="%{version}"
 %configure
 make %{?_smp_mflags}
 %{?scl:EOF}
@@ -33,7 +38,8 @@ make %{?_smp_mflags}
 %{?scl:EOF}
 
 %files
-%doc
+%doc Readme.md LICENSE
+%{_bindir}/%{name}
 
 
 
